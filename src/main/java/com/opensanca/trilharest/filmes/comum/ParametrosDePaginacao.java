@@ -8,6 +8,16 @@ public class ParametrosDePaginacao {
     private Integer pagina; // 0-based
     private Integer tamanhoDaPagina;
 
+    public ParametrosDePaginacao() {
+        this.pagina = 0;
+        this.tamanhoDaPagina = 10;
+    }
+
+    public ParametrosDePaginacao(Integer pagina, Integer tamanhoDaPagina) {
+        this.pagina = pagina;
+        this.tamanhoDaPagina = tamanhoDaPagina;
+    }
+
     public Integer getPagina() {
         return pagina;
     }

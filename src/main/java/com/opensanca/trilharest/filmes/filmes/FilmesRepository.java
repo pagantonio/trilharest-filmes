@@ -2,7 +2,9 @@ package com.opensanca.trilharest.filmes.filmes;
 
 import com.opensanca.trilharest.filmes.comum.Pagina;
 import com.opensanca.trilharest.filmes.comum.ParametrosDePaginacao;
+import com.opensanca.trilharest.filmes.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -10,7 +12,7 @@ import java.util.UUID;
  */
 public interface FilmesRepository {
 
-    Pagina<Filme> buscarPaginaEmExibicao(ParametrosDePaginacao parametrosDePaginacao);
+    Pagina<Filme> buscarPaginaEmExibicao(ParametrosDePaginacao parametrosDePaginacao, LocalDate referencia);
 
-    Filme buscarPorId(UUID id);
+    Filme buscarPorId(UUID id) throws NotFoundException;
 }
