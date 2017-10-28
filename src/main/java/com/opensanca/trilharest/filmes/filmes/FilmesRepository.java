@@ -3,6 +3,7 @@ package com.opensanca.trilharest.filmes.filmes;
 import com.opensanca.trilharest.filmes.comum.Pagina;
 import com.opensanca.trilharest.filmes.comum.ParametrosDePaginacao;
 import com.opensanca.trilharest.filmes.exception.NotFoundException;
+import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
 import java.util.UUID;

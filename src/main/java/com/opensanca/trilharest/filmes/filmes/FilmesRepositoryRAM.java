@@ -59,7 +59,7 @@ public class FilmesRepositoryRAM implements FilmesRepository {
     }
 
     @Override
-    public Filme buscarPorId(UUID id) throws NotFoundException{
+    public Filme buscarPorId(UUID id) throws NotFoundException {
         return registros.stream()
                 .filter(f -> f.getId().equals(id))
                 .findFirst()

@@ -3,6 +3,8 @@ package com.opensanca.trilharest.filmes.filmes;
 import com.opensanca.trilharest.filmes.comum.Pagina;
 import com.opensanca.trilharest.filmes.comum.ParametrosDePaginacao;
 import com.opensanca.trilharest.filmes.exception.NotFoundException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +23,18 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("/filmes")
+@Api
 public class FilmesAPI {
 
     @Autowired
     private FilmesRepository filmesRepository;
 
     @GetMapping("/em-exibicao")
+    @ApiOperation(
+            value = "Buscar página de filmes em exibição",
+            notes = "Permite a busca paginada de filmes em exibição, " +
+                    "ou seja, filmes que possuam data de início e término " +
+                    "de exibição e cujo período engloba a data atual")
     public Pagina<Filme> getEmExibicao(ParametrosDePaginacao parametrosDePaginacao) {
         if (parametrosDePaginacao == null) {
             parametrosDePaginacao = new ParametrosDePaginacao();

@@ -1,11 +1,16 @@
 package com.opensanca.trilharest.filmes.comum;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * Created by PEDRO on 07/10/2017.
  */
 public class ParametrosDePaginacao {
 
-    private Integer pagina; // 0-based
+    @ApiParam(value = "Número da página desejada", defaultValue = "0")
+    private Integer pagina;
+
+    @ApiParam(value = "Tamanho máximo da página", defaultValue = "3")
     private Integer tamanhoDaPagina;
 
     public ParametrosDePaginacao() {
