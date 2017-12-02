@@ -1,21 +1,18 @@
 package com.opensanca.trilharest.filmes.filmes;
 
-import com.opensanca.trilharest.filmes.comum.Pagina;
-import com.opensanca.trilharest.filmes.comum.ParametrosDePaginacao;
 import com.opensanca.trilharest.filmes.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
@@ -35,19 +32,37 @@ public class FilmesAPI {
             notes = "Permite a busca paginada de filmes em exibição, " +
                     "ou seja, filmes que possuam data de início e término " +
                     "de exibição e cujo período engloba a data atual")
-    public Pagina<Filme> getEmExibicao(ParametrosDePaginacao parametrosDePaginacao) {
+    public Page<FilmeResumidoDTO> getEmExibicao(Pageable parametrosDePaginacao) {
         if (parametrosDePaginacao == null) {
-            parametrosDePaginacao = new ParametrosDePaginacao();
+            parametrosDePaginacao = new PageRequest(0, 3);
         }
         return filmesRepository.buscarPaginaEmExibicao(parametrosDePaginacao, LocalDate.now());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Filme> getPorId(@PathVariable UUID id) {
-        try {
-            return new ResponseEntity<>(filmesRepository.buscarPorId(id), OK);
-        } catch (NotFoundException e) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+    public FilmeDetalhadoDTO getPorId(@PathVariable UUID id) {
+        final Filme entidade = filmesRepository.findOne(id);
+        if (entidade == null) throw new NotFoundException();
+
+        return new FilmeDetalhadoDTO(entidade);
+    }
+
+    @PostMapping
+    public UUID cadastrar(@RequestBody FilmeFormDTO dados) {
+        Filme entidade = dados.construir();
+        filmesRepository.save(entidade);
+        return entidade.getId();
+    }
+
+    @PutMapping("/{id}")
+    public void alterar(@RequestBody FilmeFormDTO dados, @PathVariable UUID id) {
+        Filme entidade = filmesRepository.findOne(id);
+        dados.preencher(entidade);
+        filmesRepository.save(entidade);
+    }
+
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable UUID id) {
+        filmesRepository.delete(id);
     }
 }
